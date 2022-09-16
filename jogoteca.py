@@ -59,4 +59,12 @@ def auth():
         flash('logado não logado')
         return redirect('/login')
 
+
+@app.route('/logout')
+def logout():
+    session['user_jogoteca'] = None
+    flash('Logout efetuado com sucesso')
+    return redirect('/')
+
+
 app.run(host, port, debug=True)
