@@ -1,44 +1,45 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
-
-
-class Game:
-    def __init__(self, name, category, console):
-        self.name = name
-        self.category = category
-        self.console = console
-
-
-class User:
-    def __init__(self, name, username, password):
-        self.name = name
-        self.username = username
-        self.password = password
-
-
-user1 = User('Samuel Constantino', 'samuel', '123')
-user2 = User('User One', 'user1', '123')
-user3 = User('User Two', 'user2', '123')
-
-users = {
-    user1.username: user1,
-    user2.username: user2,
-    user3.username: user3,
-}
-
-game1 = Game('Game 1', 'Category 1', 'Console 1')
-game2 = Game('Game 2', 'Category 2', 'Console 2')
-game3 = Game('Game 3', 'Category 3', 'Console 3')
-
-games = [game1, game2, game3]
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = 'cookie_secret_key'
 host = '0.0.0.0'
 port = 8080
 
+app.config['SQLALCHEMY_DATAbASE_URI'] = \
+    '{SGBD}://{user}:{password}@{server}/{database}'.format(
+        SGBD='mysql+mysqlconnector',
+        user='root',
+        password='samuel1234',
+        server='127.0.0.1',
+        database='jogoteca',
+    )
+
+db = SQLAlchemy(app)
+
+class Games(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False)
+    category = db.Column(db.String(40), nullable=False)
+    console = db.Column(db.String(20), nullable=False)
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+
+class Users(db.Model):
+    username = db.Column(db.String(8), primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
 
 @app.route('/')
 def index():
+    games = Games.query.order_by(Games.id)
+    print(games)
     return render_template('list.html', title="Jogos", games=games)
 
 
@@ -81,7 +82,6 @@ def auth():
 
     flash('logado não logado')
     return redirect(url_for('login'))
-
 
 
 @app.route('/logout')
