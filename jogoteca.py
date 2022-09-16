@@ -40,4 +40,19 @@ def create():
     return redirect('/')
 
 
+@app.route('/login')
+def login():
+    return render_template('login.html', title='Faça seu login')
+
+
+@app.route('/auth', methods=['POST', ])
+def auth():
+    username = request.form['username']
+    password = request.form['password']
+
+    if username == 'user' and password == '123':
+        return redirect('/')
+    else:
+        return redirect('/login')
+
 app.run(host, port, debug=True)
