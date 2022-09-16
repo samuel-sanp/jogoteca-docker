@@ -26,6 +26,8 @@ def index():
 
 @app.route('/new')
 def new():
+    if 'user_jogoteca' not in session or session['user_jogoteca'] is None:
+        return redirect('/login?next_page=new')
     return render_template('new.html', title="Novo Jogo")
 
 
@@ -43,18 +45,20 @@ def create():
 
 @app.route('/login')
 def login():
-    return render_template('login.html', title='Faça seu login')
+    next_page = request.args.get('next_page')
+    return render_template('login.html', title='Faça seu login', next_page=next_page)
 
 
 @app.route('/auth', methods=['POST', ])
 def auth():
     username = request.form['username']
     password = request.form['password']
+    next_page = request.form['next_page']
 
     if username == 'user' and password == '123':
         session['user_jogoteca'] = username
         flash(username + ' logado com sucesso')
-        return redirect('/')
+        return redirect('/{}'.format(next_page))
     else:
         flash('logado não logado')
         return redirect('/login')
