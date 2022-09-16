@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, url_for
 
 
 class Game:
@@ -27,7 +27,7 @@ def index():
 @app.route('/new')
 def new():
     if 'user_jogoteca' not in session or session['user_jogoteca'] is None:
-        return redirect('/login?next_page=new')
+        return redirect(url_for('login', next_page=url_for('new')))
     return render_template('new.html', title="Novo Jogo")
 
 
@@ -40,7 +40,7 @@ def create():
     new_game = Game(name, category, console)
     games.append(new_game)
 
-    return redirect('/')
+    return redirect(url_for('index'))
 
 
 @app.route('/login')
@@ -58,17 +58,17 @@ def auth():
     if username == 'user' and password == '123':
         session['user_jogoteca'] = username
         flash(username + ' logado com sucesso')
-        return redirect('/{}'.format(next_page))
+        return redirect(next_page)
     else:
         flash('logado não logado')
-        return redirect('/login')
+        return redirect(url_for('login'))
 
 
 @app.route('/logout')
 def logout():
     session['user_jogoteca'] = None
     flash('Logout efetuado com sucesso')
-    return redirect('/')
+    return redirect(url_for('index'))
 
 
 app.run(host, port, debug=True)

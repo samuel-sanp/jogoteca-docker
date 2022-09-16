@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block content %}
-<form method="POST" action="/auth">
+<form method="POST" action="{{ url_for('auth') }}">
     <input type="hidden" name="next_page" value="{{ next_page }}" >
     <p>
         <label>Nome de usuário:</label>
