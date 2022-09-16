@@ -6,7 +6,7 @@ app.secret_key = 'cookie_secret_key'
 host = '0.0.0.0'
 port = 8080
 
-app.config['SQLALCHEMY_DATAbASE_URI'] = \
+app.config['SQLALCHEMY_DATABASE_URI'] = \
     '{SGBD}://{user}:{password}@{server}/{database}'.format(
         SGBD='mysql+mysqlconnector',
         user='root',
