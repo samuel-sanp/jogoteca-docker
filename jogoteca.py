@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 
 class Game:
@@ -9,6 +9,7 @@ class Game:
 
 
 app = Flask(__name__)
+app.secret_key = 'cookie_secret_key'
 host = '0.0.0.0'
 port = 8080
 
@@ -51,8 +52,11 @@ def auth():
     password = request.form['password']
 
     if username == 'user' and password == '123':
+        session['user_jogoteca'] = username
+        flash(username + ' logado com sucesso')
         return redirect('/')
     else:
+        flash('logado não logado')
         return redirect('/login')
 
 app.run(host, port, debug=True)
