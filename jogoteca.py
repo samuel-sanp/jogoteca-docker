@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 
 db = SQLAlchemy(app)
 
+
 class Games(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
@@ -39,7 +40,6 @@ class Users(db.Model):
 @app.route('/')
 def index():
     games = Games.query.order_by(Games.id)
-    print(games)
     return render_template('list.html', title="Jogos", games=games)
 
 
@@ -56,8 +56,17 @@ def create():
     category = request.form['category']
     console = request.form['console']
 
-    new_game = Game(name, category, console)
-    games.append(new_game)
+    game = Games.query.filter_by(name=name).first()
+
+    if game:
+        flash('Jogo já existente!')
+        return redirect(url_for('index'))
+
+    new_game = Games(name=name, category=category, console=console)
+    db.session.add(new_game)
+    db.session.commit()
+
+
 
     return redirect(url_for('index'))
 
@@ -74,10 +83,12 @@ def auth():
     password = request.form['password']
     next_page = request.form['next_page']
 
-    if username in users:
-        if password == users[username].password:
+    user = Users.query.filter_by(username=username).first()
+
+    if user:
+        if password == user.password:
             session['user_jogoteca'] = username
-            flash(users[username].name + ' logado com sucesso')
+            flash(user.name + ' logado com sucesso')
             return redirect(next_page)
 
     flash('login incorreto')
