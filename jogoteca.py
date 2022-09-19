@@ -79,7 +79,7 @@ def auth():
             flash(users[username].name + ' logado com sucesso')
             return redirect(next_page)
 
-    flash('logado não logado')
+    flash('login incorreto')
     return redirect(url_for('login'))
 
 
