@@ -70,7 +70,23 @@ def edit(id):
 
 @app.route('/update', methods=['POST', ])
 def update():
-    pass
+    id = request.form['id']
+    name = request.form['name']
+    category = request.form['category']
+    console = request.form['console']
+
+    game = Games.query.filter_by(id=id).first()
+
+    game.name = name
+    game.category = category
+    game.console = console
+
+    db.session.add(game)
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+
 
 
 @app.route('/logout')
