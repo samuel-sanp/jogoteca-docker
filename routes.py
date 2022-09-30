@@ -9,34 +9,6 @@ def index():
     return render_template('list.html', title="Jogos", games=games)
 
 
-@app.route('/new')
-def new():
-    if 'user_jogoteca' not in session or session['user_jogoteca'] is None:
-        return redirect(url_for('login', next_page=url_for('new')))
-    return render_template('new.html', title="Novo Jogo")
-
-
-@app.route('/create', methods=['POST', ])
-def create():
-    name = request.form['name']
-    category = request.form['category']
-    console = request.form['console']
-
-    game = Games.query.filter_by(name=name).first()
-
-    if game:
-        flash('Jogo já existente!')
-        return redirect(url_for('index'))
-
-    new_game = Games(name=name, category=category, console=console)
-    db.session.add(new_game)
-    db.session.commit()
-
-
-
-    return redirect(url_for('index'))
-
-
 @app.route('/login')
 def login():
     next_page = request.args.get('next_page')
@@ -61,9 +33,48 @@ def auth():
     return redirect(url_for('login'))
 
 
+@app.route('/new')
+def new():
+    if 'user_jogoteca' not in session or session['user_jogoteca'] is None:
+        return redirect(url_for('login', next_page=url_for('new')))
+    return render_template('new.html', title="Novo Jogo")
+
+
+@app.route('/create', methods=['POST', ])
+def create():
+    name = request.form['name']
+    category = request.form['category']
+    console = request.form['console']
+
+    game = Games.query.filter_by(name=name).first()
+
+    if game:
+        flash('Jogo já existente!')
+        return redirect(url_for('index'))
+
+    new_game = Games(name=name, category=category, console=console)
+    db.session.add(new_game)
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+
+@app.route('/edit/<int:id>')
+def edit(id):
+    if 'user_jogoteca' not in session or session['user_jogoteca'] is None:
+        return redirect(url_for('login', next_page=url_for('edit', id=id)))
+
+    game = Games.query.filter_by(id=id).first()
+    return render_template('edit.html', title="Editar Jogo", game=game)
+
+
+@app.route('/update', methods=['POST', ])
+def update():
+    pass
+
+
 @app.route('/logout')
 def logout():
     session['user_jogoteca'] = None
     flash('Logout efetuado com sucesso')
     return redirect(url_for('index'))
-
