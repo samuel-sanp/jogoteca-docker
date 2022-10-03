@@ -1,6 +1,16 @@
 {% extends "template.html" %}
 {% block content %}
-<form action="{{ url_for('update') }}" method="post">
+<form action="{{ url_for('update') }}" method="post" enctype="multipart/form-data">
+    <figure class="img-thumbnail col-md-4">
+      <img src="{{ url_for('image', name=cover_image) }}" class="img-fluid">
+      <figcaption>
+        <label class="fileContainer">
+          Alterar imagem
+          <input type="file" name="image-file" accept=".jpg" />
+        </label>
+      </figcaption>
+    </figure>
+
     <fieldset>
       <input type="hidden" name="id" value="{{ game.id }}" />
       <div class="form-group">

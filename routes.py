@@ -1,6 +1,8 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import app, db
 from models import Games, Users
+from helpers import get_image, remove_image
+import time
 
 
 @app.route('/')
@@ -56,9 +58,11 @@ def create():
     db.session.add(new_game)
     db.session.commit()
 
+    timestamp = time.time()
+
     image_file = request.files['image-file']
     uploads_path = app.config['UPLOADS_PATH']
-    image_file.save(f'{uploads_path}/{new_game.id}-{image_file.filename}')
+    image_file.save(f'{uploads_path}/capa-{new_game.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
@@ -69,7 +73,9 @@ def edit(id):
         return redirect(url_for('login', next_page=url_for('edit', id=id)))
 
     game = Games.query.filter_by(id=id).first()
-    return render_template('edit.html', title="Editar Jogo", game=game)
+    cover_image = get_image(id)
+
+    return render_template('edit.html', title="Editar Jogo", game=game, cover_image=cover_image)
 
 
 @app.route('/update', methods=['POST', ])
@@ -87,6 +93,13 @@ def update():
 
     db.session.add(game)
     db.session.commit()
+
+    timestamp = time.time()
+
+    image_file = request.files['image-file']
+    uploads_path = app.config['UPLOADS_PATH']
+    remove_image(game.id)
+    image_file.save(f'{uploads_path}/capa-{game.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
