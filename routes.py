@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import app, db
 from models import Games, Users
-from helpers import get_image, remove_image
+from helpers import get_image, remove_image, GameForm, LoginForm
 import time
 
 
@@ -14,13 +14,15 @@ def index():
 @app.route('/login')
 def login():
     next_page = request.args.get('next_page')
-    return render_template('login.html', title='Faça seu login', next_page=next_page)
+    form = LoginForm()
+    return render_template('login.html', title='Faça seu login', next_page=next_page, form=form)
 
 
 @app.route('/auth', methods=['POST', ])
 def auth():
-    username = request.form['username']
-    password = request.form['password']
+    form = LoginForm(request.form)
+    username = form.nickname.data
+    password = form.password.data
     next_page = request.form['next_page']
 
     user = Users.query.filter_by(username=username).first()
@@ -29,6 +31,10 @@ def auth():
         if password == user.password:
             session['user_jogoteca'] = username
             flash(user.name + ' logado com sucesso')
+
+            if next_page == 'None':
+                return redirect('/')
+
             return redirect(next_page)
 
     flash('login incorreto')
@@ -39,14 +45,20 @@ def auth():
 def new():
     if 'user_jogoteca' not in session or session['user_jogoteca'] is None:
         return redirect(url_for('login', next_page=url_for('new')))
-    return render_template('new.html', title="Novo Jogo")
+
+    form = GameForm()
+    return render_template('new.html', title="Novo Jogo", form=form)
 
 
 @app.route('/create', methods=['POST', ])
 def create():
-    name = request.form['name']
-    category = request.form['category']
-    console = request.form['console']
+    form = GameForm(request.form)
+    if not form.validate_on_submit():
+        return redirect(url_for('new'))
+
+    name = form.name.data
+    category = form.category.data
+    console = form.console.data
 
     game = Games.query.filter_by(name=name).first()
 
@@ -75,31 +87,39 @@ def edit(id):
     game = Games.query.filter_by(id=id).first()
     cover_image = get_image(id)
 
-    return render_template('edit.html', title="Editar Jogo", game=game, cover_image=cover_image)
+    form = GameForm()
+    form.name.data = game.name
+    form.category.data = game.category
+    form.console.data = game.console
+
+    return render_template('edit.html', title="Editar Jogo", id=id, cover_image=cover_image, form=form)
 
 
 @app.route('/update', methods=['POST', ])
 def update():
-    id = request.form['id']
-    name = request.form['name']
-    category = request.form['category']
-    console = request.form['console']
+    form = GameForm()
 
-    game = Games.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        id = request.form['id']
+        name = form.name.data
+        category = form.category.data
+        console = form.console.data
 
-    game.name = name
-    game.category = category
-    game.console = console
+        game = Games.query.filter_by(id=id).first()
 
-    db.session.add(game)
-    db.session.commit()
+        game.name = name
+        game.category = category
+        game.console = console
 
-    timestamp = time.time()
+        db.session.add(game)
+        db.session.commit()
 
-    image_file = request.files['image-file']
-    uploads_path = app.config['UPLOADS_PATH']
-    remove_image(game.id)
-    image_file.save(f'{uploads_path}/capa-{game.id}-{timestamp}.jpg')
+        timestamp = time.time()
+
+        image_file = request.files['image-file']
+        uploads_path = app.config['UPLOADS_PATH']
+        remove_image(game.id)
+        image_file.save(f'{uploads_path}/capa-{game.id}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
