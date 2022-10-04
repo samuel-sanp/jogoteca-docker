@@ -9,7 +9,8 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
-from routes import *
+from route_user import *
+from route_game import *
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

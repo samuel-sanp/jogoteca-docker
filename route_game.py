@@ -1,45 +1,13 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import app, db
-from models import Games, Users
-from helpers import get_image, remove_image, GameForm, LoginForm
+from models import Games
+from helpers import get_image, remove_image, GameForm
 import time
-
 
 @app.route('/')
 def index():
     games = Games.query.order_by(Games.id)
     return render_template('list.html', title="Jogos", games=games)
-
-
-@app.route('/login')
-def login():
-    next_page = request.args.get('next_page')
-    form = LoginForm()
-    return render_template('login.html', title='Faça seu login', next_page=next_page, form=form)
-
-
-@app.route('/auth', methods=['POST', ])
-def auth():
-    form = LoginForm(request.form)
-    username = form.nickname.data
-    password = form.password.data
-    next_page = request.form['next_page']
-
-    user = Users.query.filter_by(username=username).first()
-
-    if user:
-        if password == user.password:
-            session['user_jogoteca'] = username
-            flash(user.name + ' logado com sucesso')
-
-            if next_page == 'None':
-                return redirect('/')
-
-            return redirect(next_page)
-
-    flash('login incorreto')
-    return redirect(url_for('login'))
-
 
 @app.route('/new')
 def new():
@@ -136,14 +104,6 @@ def remove(id):
     return redirect(url_for('index'))
 
 
-@app.route('/logout')
-def logout():
-    session['user_jogoteca'] = None
-    flash('Logout efetuado com sucesso')
-    return redirect(url_for('index'))
-
-
 @app.route('/uploads/<name>')
 def image(name):
     return send_from_directory('uploads', name)
-

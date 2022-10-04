@@ -11,9 +11,9 @@
         {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control") }}
     </div>
-    <div>
+    <div class="form-group buttons">
         {{ form.submit(class="btn btn-primary") }}
+        <a class="btn btn-danger" href="{{ url_for('index') }}">Voltar</a>
     </div>
 </form>
-<a class="btn btn-danger" href="{{ url_for('index') }}">Voltar</a>
 {%endblock%}
