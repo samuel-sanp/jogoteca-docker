@@ -94,4 +94,4 @@ def db_init():
     cursor.close()
     conn.close()
 
-    return 'init database'
+    return 'Banco de dados populado com sucesso!'
