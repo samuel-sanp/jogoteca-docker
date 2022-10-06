@@ -13,6 +13,7 @@ bcrypt = Bcrypt(app)
 
 from route_user import *
 from route_game import *
+from route_db import *
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0')

@@ -6,7 +6,7 @@ SQLALCHEMY_DATABASE_URI = \
         SGBD='mysql+mysqlconnector',
         user='root',
         password='samuel1234',
-        server='127.0.0.1',
+        server='mysqldb',
         database='jogoteca',
     )
 UPLOADS_PATH = os.path.dirname(os.path.abspath(__file__)) + '/uploads'
