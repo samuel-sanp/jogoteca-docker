@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, session, flash, url_for
-from jogoteca import app
+from app import app
 from models import Users
 from helpers import LoginForm
 from flask_bcrypt import check_password_hash

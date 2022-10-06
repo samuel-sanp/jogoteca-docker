@@ -1,13 +1,15 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
-from jogoteca import app, db
+from app import app, db
 from models import Games
 from helpers import get_image, remove_image, GameForm
 import time
+
 
 @app.route('/')
 def index():
     games = Games.query.order_by(Games.id)
     return render_template('list.html', title="Jogos", games=games)
+
 
 @app.route('/new')
 def new():
