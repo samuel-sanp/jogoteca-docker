@@ -88,15 +88,13 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v3
 
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
       with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
-
-    - name: Adding Known Hosts
-      run: ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-
-    - name: Deploy with rsync
-      run: rsync -avzn ./ ${{ secrets.SERVE_USER }}@${{ secrets.SERVER_HOST }}:/src
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          whoami
+          ls -al
     needs: build
