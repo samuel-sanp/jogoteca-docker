@@ -7,11 +7,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
@@ -34,6 +34,12 @@ jobs:
       - name: Test with pytest
         run: |
           python3 -m pytest
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         id: buildx
@@ -69,3 +75,4 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
           
       
+    needs: unit-tests
