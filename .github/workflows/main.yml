@@ -88,11 +88,15 @@ jobs:
     - name: Get latest code
       uses: actions/checkout@v3
 
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.2
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
       with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: main/
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy with rsync
+      run: rsync -avzn ./ ${{ secrets.SERVE_USER }}@${{ secrets.SERVER_HOST }}:/src
     needs: build
