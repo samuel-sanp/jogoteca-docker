@@ -8,6 +8,7 @@ on:
 
 jobs:
   unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -36,7 +37,9 @@ jobs:
           python3 -m pytest
 
 
+
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repo
@@ -92,4 +95,4 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: main/
-        needs: build
+    needs: build
