@@ -16,5 +16,4 @@ from route_game import *
 from route_db import *
 
 if __name__ == '__main__':
-    print('ci/cd')
     app.run(host='0.0.0.0')
