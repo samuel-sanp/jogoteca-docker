@@ -13,3 +13,4 @@ protobuf==4.21.6
 SQLAlchemy==1.4.41
 Werkzeug==2.0.0
 WTForms==3.0.1
+pytest==7.1.3
