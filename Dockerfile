@@ -12,5 +12,5 @@ COPY . .
 RUN python3 -m pytest
 
 # CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
-
+CMD ['ls', '-la']
 CMD ["python3", "app.py"]
