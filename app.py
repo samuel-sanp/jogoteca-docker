@@ -2,8 +2,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
+from flask_talisman import Talisman
 
 app = Flask(__name__)
+Talisman(app, content_security_policy=None)
 
 app.config.from_pyfile('config.py')
 
