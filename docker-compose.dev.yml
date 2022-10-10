@@ -3,7 +3,7 @@ version: '3.8'
 services:
  web:
   build:
-   context: .
+   context: /app
   ports:
   - 443:5000
   volumes:
