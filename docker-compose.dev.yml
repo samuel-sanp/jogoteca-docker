@@ -5,9 +5,10 @@ services:
   build:
    context: .
   ports:
-  - 8000:5000
+  - 443:5000
   volumes:
   - ./:/app
+  - /etc/letsencrypt:/etc/letsencrypt
   depends_on:
    - mysqldb
 
