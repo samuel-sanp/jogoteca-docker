@@ -5,6 +5,7 @@ SECRET_KEY = os.getenv('DB_SECRET_KEY')
 SGBD = os.getenv('DB_SGBD')
 user = os.getenv('DB_USER')
 password = os.getenv('DB_PASSWORD')
+print('SENHAAAAAAAAAAAAA: ', password)
 server = os.getenv('DB_SERVER')
 database = os.getenv('DB_DATABSE')
 
