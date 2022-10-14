@@ -9,9 +9,8 @@ app = Flask(__name__)
 
 config = dotenv_values(".env")
 
-if config['DEV'] == 'True':
-    print('AEEEEE CARALEO')
-Talisman(app, content_security_policy=None)
+if config['ENVIRONMENT_DEV'] != 'True':
+    Talisman(app, content_security_policy=None)
 
 app.config.from_pyfile('config.py')
 
