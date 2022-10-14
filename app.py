@@ -3,15 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 from flask_talisman import Talisman
-from dotenv import dotenv_values
+import os
 
 app = Flask(__name__)
 
-config = dotenv_values(".env")
-
-print("VARIAVEIS DE AMBIENTE", config)
-
-if config['ENVIRONMENT_DEV'] != 'True':
+if os.getenv('ENVIRONMENT_DEV') != 'True':
     Talisman(app, content_security_policy=None)
 
 app.config.from_pyfile('config.py')

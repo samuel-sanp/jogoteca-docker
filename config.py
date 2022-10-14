@@ -1,15 +1,13 @@
 import os
-from dotenv import dotenv_values
 
-config = dotenv_values(".env")
+SECRET_KEY = os.getenv('DB_SECRET_KEY')
 
-SECRET_KEY = config['DB_SECRET_KEY']
-SQLALCHEMY_DATABASE_URI = \
-    '{SGBD}://{user}:{password}@{server}/{database}'.format(
-        SGBD=config['DB_SGBD'],
-        user=config['DB_USER'],
-        password=config['DB_PASSWORD'],
-        server=config['DB_SERVER'],
-        database=config['DB_DATABSE'],
-    )
+SGBD = os.getenv('DB_SGBD')
+user = os.getenv('DB_USER')
+password = os.getenv('DB_PASSWORD')
+server = os.getenv('DB_SERVER')
+database = os.getenv('DB_DATABSE')
+
+SQLALCHEMY_DATABASE_URI = f"{SGBD}://{user}:{password}@{server}/{database}"
+
 UPLOADS_PATH = os.path.dirname(os.path.abspath(__file__)) + '/uploads'
