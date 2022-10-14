@@ -6,7 +6,7 @@ from flask_talisman import Talisman
 import os
 
 app = Flask(__name__)
-
+print('SENHAAAAAAAAAAAAA: ', os.getenv('DB_PASSWORD'))
 if os.getenv('ENVIRONMENT_DEV') != 'True':
     Talisman(app, content_security_policy=None)
 
