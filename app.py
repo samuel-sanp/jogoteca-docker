@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 config = dotenv_values(".env")
 
-print(config)
+print("VARIAVEIS DE AMBIENTE", config)
 
 if config['ENVIRONMENT_DEV'] != 'True':
     Talisman(app, content_security_policy=None)
