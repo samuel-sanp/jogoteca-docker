@@ -8,18 +8,22 @@ import os
 
 @app.route('/initdb')
 def db_init():
+    password = None
+    with open(os.getenv('DB_PASSWORD')) as f:
+        password = f.read()
+
     print("Conectando...")
     try:
         conn = mysql.connector.connect(
             host= os.getenv('DB_HOST'),
             user= os.getenv('DB_USER'),
-            password= os.getenv('DB_PASSWORD')
+            # password= os.getenv('DB_PASSWORD')
+            password=password
         )
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print('usuário ou senha do banco de dados inválido(s)')
-            # return 'usuário ou senha do banco de dados inválido(s)'
-            return f"{os.getenv('DB_USER')}, {os.getenv('DB_PASSWORD')}"
+            return 'usuário ou senha do banco de dados inválido(s)'
         else:
             print(err)
             return err.msg
