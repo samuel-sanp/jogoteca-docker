@@ -3,6 +3,7 @@
 __pycache__/
 uploads/*
 docker-compose.yml
+*.txt
 
 # Environments
 .env
