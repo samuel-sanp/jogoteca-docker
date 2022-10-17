@@ -6,7 +6,10 @@ SGBD = os.getenv('DB_SGBD')
 user = os.getenv('DB_USER')
 server = os.getenv('DB_SERVER')
 database = os.getenv('DB_DATABASE')
-password = os.getenv('DB_PASSWORD')
+
+password = None
+with open(os.getenv('DB_PASSWORD')) as f:
+    password = f.read()
 
 SQLALCHEMY_DATABASE_URI = f"{SGBD}://{user}:{password}@{server}/{database}"
 
