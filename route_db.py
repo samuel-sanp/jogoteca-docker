@@ -5,7 +5,6 @@ from flask_bcrypt import generate_password_hash
 import os
 
 
-
 @app.route('/initdb')
 def db_init():
     password = None
@@ -23,7 +22,8 @@ def db_init():
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print('usuário ou senha do banco de dados inválido(s)')
-            return f"{os.getenv('DB_SGBD')} {os.getenv('DB_USER')} {password} {os.getenv('DB_SERVER')} {os.getenv('DB_DATABASE')} {os.getenv('DB_HOST')}"
+            return err
+            # return f"{os.getenv('DB_SGBD')} {os.getenv('DB_USER')} {password} {os.getenv('DB_SERVER')} {os.getenv('DB_DATABASE')} {os.getenv('DB_HOST')}"
             # return 'usuário ou senha do banco de dados inválido(s)'
         else:
             print(err)
