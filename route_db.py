@@ -22,7 +22,7 @@ def db_init():
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print('usuário ou senha do banco de dados inválido(s)')
-            return f"Erro Message: {err.msg}\nSGBD: {os.getenv('DB_SGBD')}\nUSER: {os.getenv('DB_USER')}\nPASS: {password}\nSERVER{os.getenv('DB_SERVER')}\nDATABASE{os.getenv('DB_DATABASE')}\nHOST{os.getenv('DB_HOST')}\n"
+            return f"Erro Message: {err.msg}\nSGBD: {os.getenv('DB_SGBD')}\nUSER: {os.getenv('DB_USER')}\nPASS: {password}\nSERVER: {os.getenv('DB_SERVER')}\nDATABASE: {os.getenv('DB_DATABASE')}\nHOST: {os.getenv('DB_HOST')}\n"
             # return 'usuário ou senha do banco de dados inválido(s)'
         else:
             print(err)
