@@ -13,11 +13,10 @@ def db_init():
 
     print("Conectando...")
     try:
-        return f"{password}"
         conn = mysql.connector.connect(
             host=os.getenv('DB_HOST'),
             user=os.getenv('DB_USER'),
-            password="samuel1234"
+            password=f"{password}"
         )
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
