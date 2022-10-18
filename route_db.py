@@ -14,11 +14,9 @@ def db_init():
     print("Conectando...")
     try:
         conn = mysql.connector.connect(
-            # host=os.getenv('DB_HOST'),
-            host="mysqldb",
-            # user=os.getenv('DB_USER'),
-            user="root",
-            password=password
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('DB_USER'),
+            password="samuel1234"
         )
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
