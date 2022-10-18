@@ -8,7 +8,7 @@ import os
 @app.route('/initdb')
 def db_init():
     f = open(os.getenv('DB_PASSWORD'), "r")
-    password = f.read(10)
+    password = f.read()
     f.close()
 
     print("Conectando...")
