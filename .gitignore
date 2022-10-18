@@ -1,7 +1,6 @@
 .idea
 .venv
 __pycache__/
-uploads/*
 docker-compose.yml
 *.txt
 
