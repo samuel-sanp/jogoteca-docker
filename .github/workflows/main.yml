@@ -33,8 +33,7 @@ jobs:
           
       - name: Set password file
         run: |
-          touch db_password.txt
-          echo ${{ secrets.DB_PASSWORD }} > db_password.txt
+          echo ${{ secrets.DB_PASSWORD }} >> db_password.txt
 
       - name: Test with pytest
         run: |
