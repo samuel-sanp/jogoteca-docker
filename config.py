@@ -8,7 +8,7 @@ server = os.getenv('DB_SERVER')
 database = os.getenv('DB_DATABASE')
 
 f = open(os.getenv('DB_PASSWORD'), "r")
-password = f.read()
+password = f.read(10)
 f.close()
 
 SQLALCHEMY_DATABASE_URI = f"{SGBD}://{user}:{password}@{server}/{database}"
