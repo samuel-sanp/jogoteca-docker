@@ -1,12 +1,16 @@
 import os
 
-SECRET_KEY = 'cookie_secret_key'
-SQLALCHEMY_DATABASE_URI = \
-    '{SGBD}://{user}:{password}@{server}/{database}'.format(
-        SGBD='mysql+mysqlconnector',
-        user='root',
-        password='samuel1234',
-        server='mysqldb',
-        database='jogoteca',
-    )
+SECRET_KEY = os.getenv('DB_SECRET_KEY')
+
+SGBD = os.getenv('DB_SGBD')
+user = os.getenv('DB_USER')
+server = os.getenv('DB_SERVER')
+database = os.getenv('DB_DATABASE')
+
+f = open(os.getenv('DB_PASSWORD'), "r")
+password = f.read(10)
+f.close()
+
+SQLALCHEMY_DATABASE_URI = f"{SGBD}://{user}:{password}@{server}/{database}"
+
 UPLOADS_PATH = os.path.dirname(os.path.abspath(__file__)) + '/uploads'

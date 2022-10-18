@@ -2,22 +2,27 @@ from app import app
 import mysql.connector
 from mysql.connector import errorcode
 from flask_bcrypt import generate_password_hash
-
+import os
 
 
 @app.route('/initdb')
 def db_init():
+    f = open(os.getenv('DB_PASSWORD'), "r")
+    password = f.read(10)
+    f.close()
+
     print("Conectando...")
     try:
         conn = mysql.connector.connect(
-            host='mysqldb',
-            user='root',
-            password='samuel1234'
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('DB_USER'),
+            password=password
         )
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print('usuário ou senha do banco de dados inválido(s)')
-            return 'usuário ou senha do banco de dados inválido(s)'
+            return f"Erro Message: {err.msg}\nSGBD: {os.getenv('DB_SGBD')}\nUSER: {os.getenv('DB_USER')}\nPASS: {password}\nSERVER: {os.getenv('DB_SERVER')}\nDATABASE: {os.getenv('DB_DATABASE')}\nHOST: {os.getenv('DB_HOST')}\n"
+            # return 'usuário ou senha do banco de dados inválido(s)'
         else:
             print(err)
             return err.msg
@@ -84,7 +89,7 @@ def db_init():
     cursor.executemany(jogos_sql, jogos)
 
     cursor.execute('select * from jogoteca.games')
-    print(' -------------  Jogos:  -------------')
+    print('-------------  Jogos:  -------------')
     for jogo in cursor.fetchall():
         print(jogo[1])
 

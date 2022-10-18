@@ -9,4 +9,9 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+RUN python3 -m pytest
+
+EXPOSE 5000
+
+CMD ["python3", "-m", "gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "--certfile", "/etc/letsencrypt/live/samucaloc.sanp.dev/fullchain.pem", "--keyfile", "/etc/letsencrypt/live/samucaloc.sanp.dev/privkey.pem", "app:app", "--timeout", "120"]
+# CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
